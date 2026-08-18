@@ -153,11 +153,7 @@ def policy_evaluation(env, policy, gamma=0.99, theta=1e-8):
 ---
 
 ## Output
-
-
-<img width="445" height="238" alt="image" src="https://github.com/user-attachments/assets/0d0f68b9-7d09-4e85-90ba-a669169e8b9f" />
-
-
+<img width="446" height="233" alt="image" src="https://github.com/user-attachments/assets/d606d515-f5f5-42c5-a708-7243d4cb39ae" />
 
 
 ---
