@@ -100,33 +100,66 @@ Where:
 
 ```python
 
+# Initialize value function
+V = np.zeros(n_states)
 
 # -------------------------------------------------
 # Policy Evaluation Function
 # -------------------------------------------------
 
+def policy_evaluation(env, policy, gamma=0.99, theta=1e-8):
+    """
+    Performs iterative policy evaluation using the Bellman expectation equation.
 
-# -------------------------------------------------
-# Display Output
-# -------------------------------------------------
+    Parameters:
+        env    : Gymnasium FrozenLake environment
+        policy : Fixed policy to be evaluated
+        gamma  : Discount factor
+        theta  : Convergence threshold
 
-# Change the parameters and observe the results
+    Returns:
+        V         : Estimated state-value function
+        iteration : Number of iterations used for convergence
+    """
+    
+    n_states = env.observation_space.n
+    V = np.zeros(n_states)
+    iteration = 0
 
+    while True:
+        delta = 0
+
+        for s in range(n_states):
+            v = V[s]
+            new_v = 0
+
+            for a, action_prob in enumerate(policy[s]):
+                for trans_prob, next_state, reward, done in env.unwrapped.P[s][a]:
+                    new_v += action_prob * trans_prob * (
+                        reward + gamma * V[next_state] * (not done)
+                    )
+
+            V[s] = new_v
+            delta = max(delta, abs(v - new_v))
+
+        iteration += 1
+
+        if delta < theta:
+            break
+
+    return V, iteration
 ```
 
 ---
 
 ## Output
 
-```text
 
-Number of Iterations: 
-
-State-Value Function as 4x4 Grid:
+<img width="445" height="238" alt="image" src="https://github.com/user-attachments/assets/0d0f68b9-7d09-4e85-90ba-a669169e8b9f" />
 
 
 
-```
+
 ---
 
 ## Result
@@ -138,7 +171,7 @@ Iterative policy evaluation was implemented successfully using the Gymnasium Fro
 ## Inference
 
 ```text
-
+Inference: The iterative policy evaluation algorithm successfully estimated the state-value function for the given random policy. The value function converged in 54 iterations, with higher values observed near the goal state and zero values for hole and terminal states, indicating that states closer to the goal have a higher expected return under the given policy.
 
 
 ```
